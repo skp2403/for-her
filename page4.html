@@ -3,27 +3,192 @@
 <head>
   <title>For You ❤️</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      overflow: hidden;
+    }
+
+    /* Gift box */
+    .gift-box {
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+      border-radius: 20px;
+      margin: 120px auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .open-text {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    /* Hidden content */
+    .content {
+      display: none;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .final-box {
+      margin-top: 30px;
+      padding: 24px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      animation: fadeUp 1.5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .line {
+      opacity: 0;
+      animation: appear 1s ease forwards;
+    }
+
+    .line:nth-child(1) { animation-delay: 0.6s; }
+    .line:nth-child(2) { animation-delay: 1.4s; }
+    .line:nth-child(3) { animation-delay: 2.2s; }
+    .line:nth-child(4) { animation-delay: 3.0s; }
+
+    @keyframes appear {
+      to { opacity: 1; }
+    }
+
+    /* Floating hearts */
+    .heart-float {
+      position: absolute;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh); }
+      to   { transform: translateY(-10vh); }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
+
 <body class="fade">
 
-<h2>🎉 You made it</h2>
+<!-- 🎁 CLOSED GIFT -->
+<div id="gift" class="gift-box" onclick="openGift()">🎁</div>
+<div id="openText" class="open-text">Tap to open</div>
 
-<p>
-Now open the <b>laundry compartment to find</b> 🧺<br><br>
-🌹 A rose<br>
-💌 A set of lovely cards (only for you)<br>
-🧴 A small bottle with a tiny note(Only for you to read)
-</p>
+<!-- 💖 HIDDEN CONTENT -->
+<div id="content" class="content">
 
-<h3>This was never a question…  
-it was always you ❤️</h3>
+  <h2>🎉 You made it</h2>
 
-<audio id="bgm" autoplay loop>
+  <div class="final-box">
+    <p class="line">Now open the <b>laundry compartment</b> 🧺</p>
+    <p class="line">🌹 A rose — because romance still matters</p>
+    <p class="line">💌 A set of lovely cards — only for your eyes</p>
+    <p class="line">🧴 A small bottle with a tiny note — only for you</p>
+  </div>
+
+  <h3 style="margin-top:30px; opacity:0; animation: appear 1s ease forwards; animation-delay:3.8s;">
+    This was never a question…<br>
+    <span style="color:#ff4d6d;">it was always you ❤️</span>
+  </h3>
+
+</div>
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgm" loop preload="auto">
   <source src="music.mp3" type="audio/mp3">
 </audio>
 
+<canvas id="confetti"></canvas>
+
 <script>
+/* ===== MUSIC ===== */
+const bgm = document.getElementById("bgm");
 bgm.volume = 0.1;
+
+/* ===== OPEN GIFT ===== */
+function openGift() {
+  bgm.play().catch(() => {});
+  document.getElementById("gift").style.display = "none";
+  document.getElementById("openText").style.display = "none";
+  document.getElementById("content").style.display = "block";
+  launchConfetti();
+}
+
+/* ===== FLOATING HEARTS ===== */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart-float";
+  heart.innerText = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+setInterval(createHeart, 900);
+
+/* ===== CONFETTI ===== */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function launchConfetti() {
+  let pieces = [];
+  for (let i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 5 + 3,
+      dy: Math.random() * 3 + 1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "#ff4d6d";
+      ctx.fill();
+      p.y += p.dy;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
 </script>
 
 </body>

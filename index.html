@@ -15,9 +15,26 @@
 
 <div id="content"></div>
 
-<audio id="bgm" autoplay loop>
+<audio id="bgm" loop>
   <source src="music.mp3" type="audio/mp3">
 </audio>
+
+<script>
+const bgm = document.getElementById("bgm");
+bgm.volume = 0.2;
+
+// Start music on first user interaction
+function startMusicOnce() {
+  bgm.play().catch(() => {});
+  document.removeEventListener("click", startMusicOnce);
+  document.removeEventListener("touchstart", startMusicOnce);
+}
+
+// These events fire immediately when page is touched
+document.addEventListener("click", startMusicOnce);
+document.addEventListener("touchstart", startMusicOnce);
+</script>
+
 
 <script>
 bgm.volume = 0.2;

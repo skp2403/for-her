@@ -10,12 +10,13 @@
 <p>there is <b>something made only for you</b></p>
 
 <p>Enter the secret password 👀</p>
-<input type="password" id="pwd" placeholder="HINT: our whatsap CHAT(9th-feb)"><br><br>
+<input type="password" id="pwd" placeholder="HINT: our WhatsApp chat (9th Feb)"><br><br>
 <button class="primary" onclick="unlock()">Unlock 🔐</button>
 
 <div id="content"></div>
 
-<audio id="bgm" loop>
+<!-- 🎵 Background Music -->
+<audio id="bgm" loop preload="auto">
   <source src="music.mp3" type="audio/mp3">
 </audio>
 
@@ -23,24 +24,17 @@
 const bgm = document.getElementById("bgm");
 bgm.volume = 0.2;
 
-// Start music on first user interaction
-function startMusicOnce() {
-  bgm.play().catch(() => {});
-  document.removeEventListener("click", startMusicOnce);
-  document.removeEventListener("touchstart", startMusicOnce);
+// ✅ ANDROID-SAFE MUSIC START
+function startMusic() {
+  if (bgm.paused) {
+    bgm.play().catch(() => {});
+  }
 }
 
-// These events fire immediately when page is touched
-document.addEventListener("click", startMusicOnce);
-document.addEventListener("touchstart", startMusicOnce);
-</script>
-
-
-<script>
-bgm.volume = 0.2;
-
 function unlock(){
-  if(pwd.value === "LALIANDSUBHAM"){   // CHANGE PASSWORD
+  startMusic(); // 👈 MUSIC STARTS HERE (REAL CLICK)
+
+  if(pwd.value === "LALIANDSUBHAM"){
     content.innerHTML = `
       <p>😌 Correct. Obviously.</p>
       <p><b>Entry fee:</b> ₹1.1</p>
@@ -55,6 +49,8 @@ function unlock(){
 }
 
 function skip(){
+  startMusic(); // 👈 ALSO HERE (SAFETY)
+
   content.innerHTML += `
     <p>😂 As expected.</p>
     <p>Scan the QR below 👇</p>

@@ -8,13 +8,14 @@
     canvas { position:fixed; top:0; left:0; pointer-events:none; }
   </style>
 </head>
+
 <body class="fade">
 
 <h2>Almost there…</h2>
 <p>
-Nothing feels nice without a challenge!
-  why don't you try answering below 
-  with a "NO"(Try atleast 5-7 times)
+Nothing feels nice without a challenge!<br>
+Why don't you try answering below with a <b>NO</b> 😈<br>
+(Try at least 5–7 times)
 </p>
 
 <h1>Will you marry me? 💍</h1>
@@ -30,42 +31,56 @@ Nothing feels nice without a challenge!
 
 <div id="egg" style="display:none;">
   <p>🥚 Easter Egg</p>
-  <p>I knew you'd try to break this 😌  
-  And I love that about you.</p>
+  <p>
+    I knew you'd try to break this 😌<br>
+    And I love that about you.
+  </p>
 </div>
 
 <canvas id="confetti"></canvas>
 
-<audio id="bgm" autoplay loop>
-  <source src="music.mp3" type="audio/mp3">
+<!-- 🎵 NEW SONG FOR YES -->
+<audio id="yesMusic" preload="auto">
+  <source src="music2.mp3" type="audio/mp3">
 </audio>
 
 <script>
-bgm.volume = 0.15;
+/* ===== NO BUTTON MOVES ===== */
+const no = document.getElementById("no");
 
 no.addEventListener("mouseover", move);
 no.addEventListener("touchstart", move);
 
 function move(){
-  no.style.left = Math.random()*260 + "px";
-  no.style.top  = Math.random()*360 + "px";
+  no.style.left = Math.random() * 260 + "px";
+  no.style.top  = Math.random() * 360 + "px";
 }
 
+/* ===== YES ACTION ===== */
+const yesMusic = document.getElementById("yesMusic");
+yesMusic.volume = 0.25;
+
 function yes(){
-  next.style.display = "block";
+  // 🎵 Play the new song (ANDROID SAFE)
+  yesMusic.play().catch(() => {});
+
+  // 🎉 Show next section
+  document.getElementById("next").style.display = "block";
+
+  // 🎊 Confetti
   launchConfetti();
 }
 
-/* Easter Egg */
+/* ===== EASTER EGG ===== */
 let taps = 0;
 document.body.addEventListener("click", () => {
   taps++;
   if(taps === 5){
-    egg.style.display = "block";
+    document.getElementById("egg").style.display = "block";
   }
 });
 
-/* Confetti */
+/* ===== CONFETTI ===== */
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -73,19 +88,20 @@ canvas.height = window.innerHeight;
 
 function launchConfetti(){
   let pieces = [];
-  for(let i=0;i<150;i++){
+  for(let i = 0; i < 150; i++){
     pieces.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height,
-      r: Math.random()*6+4,
-      dy: Math.random()*3+2
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 6 + 4,
+      dy: Math.random() * 3 + 2
     });
   }
+
   function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = "#ff4d6d";
       ctx.fill();
       p.y += p.dy;

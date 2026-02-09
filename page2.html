@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hold On… 💙</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fade">
+
+<h2>⏳ Hold on…</h2>
+<p>Watch till the end 💙</p>
+
+<video id="vid" width="100%" controls style="max-width:360px;border-radius:18px;">
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<div id="locked">
+  <p>🔒 Finish the video to continue</p>
+</div>
+
+<div id="unlocked" style="display:none;">
+  <p>😌 Now scan this</p>
+  <img src="qr3.png" class="qr">
+</div>
+
+<audio id="bgm" autoplay loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<script>
+bgm.volume = 0.2;
+vid.onended = () => {
+  locked.style.display = "none";
+  unlocked.style.display = "block";
+};
+</script>
+
+</body>
+</html>

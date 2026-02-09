@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>For You ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fade">
+
+<h2>🎁 With all the goodies…</h2>
+<p>there is <b>something made only for you</b></p>
+
+<p>Enter the secret password 👀</p>
+<input type="password" id="pwd" placeholder="HINT: Present on our whatsap CHAT(9th-feb)"><br><br>
+<button class="primary" onclick="unlock()">Unlock 🔐</button>
+
+<div id="content"></div>
+
+<audio id="bgm" autoplay loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<script>
+bgm.volume = 0.2;
+
+function unlock(){
+  if(pwd.value === "LALIANDSUBHAM"){   // CHANGE PASSWORD
+    content.innerHTML = `
+      <p>😌 Correct. Obviously.</p>
+      <p><b>Entry fee:</b> ₹1.1</p>
+      <p>UPI: <b>crocodile@upi</b></p>
+      <p>OR</p>
+      <p>Click the heart ❤️ to skip this payment</p>
+      <div class="heart" onclick="skip()">❤️</div>
+    `;
+  } else {
+    alert("Nope 😏 Try again");
+  }
+}
+
+function skip(){
+  content.innerHTML += `
+    <p>😂 As expected.</p>
+    <p>Scan the QR below 👇</p>
+    <img src="qr2.png" class="qr">
+    <p><small>Screenshot & scan if needed</small></p>
+  `;
+}
+</script>
+
+</body>
+</html>

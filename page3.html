@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Question 💍</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #no { position:absolute; background:#eee; }
+    canvas { position:fixed; top:0; left:0; pointer-events:none; }
+  </style>
+</head>
+<body class="fade">
+
+<h2>Almost there…</h2>
+<p>
+Nothing feels nice without a challenge!
+  why don't you try answering below 
+  with a "NO"(Try atleast 5-7 times)
+</p>
+
+<h1>Will you marry me? 💍</h1>
+
+<button class="primary" onclick="yes()">YES ❤️</button>
+<button id="no">NO 🙈</button>
+
+<div id="next" style="display:none;">
+  <h2>🥹 I knew it.</h2>
+  <p>Scan the final QR 👇</p>
+  <img src="qr4.png" class="qr">
+</div>
+
+<div id="egg" style="display:none;">
+  <p>🥚 Easter Egg</p>
+  <p>I knew you'd try to break this 😌  
+  And I love that about you.</p>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<audio id="bgm" autoplay loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<script>
+bgm.volume = 0.15;
+
+no.addEventListener("mouseover", move);
+no.addEventListener("touchstart", move);
+
+function move(){
+  no.style.left = Math.random()*260 + "px";
+  no.style.top  = Math.random()*360 + "px";
+}
+
+function yes(){
+  next.style.display = "block";
+  launchConfetti();
+}
+
+/* Easter Egg */
+let taps = 0;
+document.body.addEventListener("click", () => {
+  taps++;
+  if(taps === 5){
+    egg.style.display = "block";
+  }
+});
+
+/* Confetti */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function launchConfetti(){
+  let pieces = [];
+  for(let i=0;i<150;i++){
+    pieces.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*6+4,
+      dy: Math.random()*3+2
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = "#ff4d6d";
+      ctx.fill();
+      p.y += p.dy;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+</script>
+
+</body>
+</html>
